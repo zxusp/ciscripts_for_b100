@@ -51,13 +51,21 @@ function main() {
     fi
 
     echo_summary_msg "## Run Tempest"
-    if run_tempest; then
-        echo_summary_datetime "run tempest success!"
+    if run_smoke_tempest; then
+        echo_summary_datetime "run smoke tempest success!"
     else
-        echo_summary_datetime "run tempest failure!"
+        echo_summary_datetime "run smoke tempest failure!"
         save_logs
         return 1
     fi
+    if run_storage_tempest; then
+        echo_summary_datetime "run storage tempest success!"
+    else
+        echo_summary_datetime "run storage tempest failure!"
+        save_logs
+        return 1
+    fi
+
 
     echo_summary_msg "## Finish"
     echo_summary_datetime "build ${BUILD_NUMBER} end success!"
