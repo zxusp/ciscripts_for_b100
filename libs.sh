@@ -5,10 +5,26 @@ function init_logs() {
     mkdir -p ${LOGS_PATH}
 }
 
+
+function copy_push_logs() {
+    local target_dir=${WORKSPACE}/logs_for_b100/logs/${GERRIT_CHANGE_NUMBER}
+
+    mkdir -p ${target_dir}
+    pushd ${target_dir}
+
+    git pull
+    git rm -rf *
+    cp -r ${LOGS_PATH}/* ${target_dir}/    
+    git add .
+    git commit -m "Add build ${BUILD_NUMBER}logs for ${GERRIT_BRANCH} change ${GERRIT_CHANGE_NUMBER}:${GERRIT_PATCHSET_NUMBER}"
+    git push
+    popd
+}
+
 function save_logs() {
     local result=0
     if [ -n "${GERRIT_CHANGE_NUMBER}" ]; then 
-      echo TODO arch logs to git hub
+      copy_push_logs
     else
       echo None Gerrit Change Skip Save Logs
     fi
@@ -58,8 +74,4 @@ function run_tempest() {
     popd
     return ${result}
 }
-
-
-
-
 
