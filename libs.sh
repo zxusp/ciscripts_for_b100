@@ -16,7 +16,7 @@ function copy_push_logs() {
     git rm -rf *
     cp -r ${LOGS_PATH}/* ${target_dir}/    
     git add .
-    git commit -m "Add build ${BUILD_NUMBER}logs for ${GERRIT_BRANCH} change ${GERRIT_CHANGE_NUMBER}:${GERRIT_PATCHSET_NUMBER}"
+    git commit -m "Build ${BUILD_NUMBER} logs for ${GERRIT_BRANCH} change ${GERRIT_CHANGE_NUMBER}:${GERRIT_PATCHSET_NUMBER}"
     git push
     popd
 }
