@@ -17,7 +17,7 @@ LOGS_PATH=${WORKSPACE}/logs
 
 
 function main() {
-    if [-n "${WORKSPACE}"]; then
+    if [ -z "${WORKSPACE}" ]; then
         echo "WORKSPACE is not set!"
         exit 1
     fi
@@ -62,11 +62,13 @@ function main() {
         goto :end_failure
     fi
 
-:end_success
+# end success
     echo_summary_msg "## Finish"
     echo_summary_datetime "build ${BUILD_NUMBER} end success!  "
+    save_logs
     return 0
 
+# end failure
 :end_failure
     echo_summary_msg "## Finish"
     echo_summary_datetime "build ${BUILD_NUMBER} end failure!  "
