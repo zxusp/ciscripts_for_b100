@@ -25,7 +25,7 @@ function main() {
 
     if init_logs; then
         echo_summary_msg "# CI for B100"
-        echo_summary_msg " Build ${BUILD_NUMBER} started for Branch ${GERRIT_BRANCH}, Change ${GERRIT_CHANGE_NUMBER}:${GERRIT_PATCHSET_NUMBER}.  "
+        echo_summary_msg "  Build ${BUILD_NUMBER} started for Branch ${GERRIT_BRANCH}, Change ${GERRIT_CHANGE_NUMBER}:${GERRIT_PATCHSET_NUMBER}.  "
         echo_summary_msg "## Initialization"
         echo_summary_datetime "Log initialization successful!  "
     else    
@@ -34,7 +34,7 @@ function main() {
     fi
 
     echo_summary_msg "## Install DevStack"
-    echo_summary_msg "Installing DevStack...  "
+    echo_summary_datetime "  Installing DevStack...  "
 
     if install_devstack; then
         echo_summary_datetime "DevStack installation completed successfully!  "
@@ -51,7 +51,7 @@ function main() {
     fi
 
     echo_summary_msg "## Run Tempest"
-    echo_summary_msg "Running Tempest tests...  "
+    echo_summary_datetime "Running Tempest tests...  "
 
     if run_smoke_tempest; then
         echo_summary_datetime "Smoke Tempest tests completed successfully!  "
