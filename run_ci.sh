@@ -12,7 +12,8 @@ echo scripts path is ${SCRIPTS_PATH}
 
 
 DEVSTACK_PATH=${HOME}/devstack
-TEMPEST_PATH=/opt/stack/tempest
+STACK_PATH=/opt/stack
+TEMPEST_PATH=${STACK_PATH}/tempest
 LOGS_PATH=${WORKSPACE}/logs
 
 
@@ -24,54 +25,57 @@ function main() {
 
     if init_logs; then
         echo_summary_msg "# CI for B100"
-        echo_summary_msg " Build ${BUILD_NUMBER} start for Branch ${GERRIT_BRANCH} Change ${GERRIT_CHANGE_NUMBER}:${GERRIT_PATCHSET_NUMBER}.  "
-        echo_summary_msg "## Init"
-        echo_summary_datetime "init logs success!  "
+        echo_summary_msg " Build ${BUILD_NUMBER} started for Branch ${GERRIT_BRANCH}, Change ${GERRIT_CHANGE_NUMBER}:${GERRIT_PATCHSET_NUMBER}.  "
+        echo_summary_msg "## Initialization"
+        echo_summary_datetime "Log initialization successful!  "
     else    
-        echo_summary_datetime "init logs failure!  "
+        echo_summary_datetime "Log initialization failed!  "
         goto :end_failure
     fi
 
-    echo_summary_msg "## Install Devstack"
+    echo_summary_msg "## Install DevStack"
+    echo_summary_msg "Installing DevStack...  "
 
     if install_devstack; then
-        echo_summary_datetime "install devstack success!  "
+        echo_summary_datetime "DevStack installation completed successfully!  "
     else
-        echo_summary_datetime "install devstack failure!  "
+        echo_summary_datetime "DevStack installation failed!  "
         goto :end_failure
     fi
 
     if check_devstack; then
-        echo_summary_datetime "devstack self check success!  "
+        echo_summary_datetime "DevStack self-check passed!  "
     else 
-        echo_summary_datetime "devstack self check failure!  "
+        echo_summary_datetime "DevStack self-check failed!  "
         goto :end_failure
     fi
 
     echo_summary_msg "## Run Tempest"
+    echo_summary_msg "Running Tempest tests...  "
+
     if run_smoke_tempest; then
-        echo_summary_datetime "run smoke tempest success!  "
+        echo_summary_datetime "Smoke Tempest tests completed successfully!  "
     else
-        echo_summary_datetime "run smoke tempest failure!  "
+        echo_summary_datetime "Smoke Tempest tests failed!  "
         goto :end_failure
     fi
     if run_storage_tempest; then
-        echo_summary_datetime "run storage tempest success!  "
+        echo_summary_datetime "Storage Tempest tests completed successfully!  "
     else
-        echo_summary_datetime "run storage tempest failure!  "
+        echo_summary_datetime "Storage Tempest tests failed!  "
         goto :end_failure
     fi
 
 # end success
     echo_summary_msg "## Finish"
-    echo_summary_datetime "build ${BUILD_NUMBER} end success!  "
+    echo_summary_datetime "Build ${BUILD_NUMBER} completed successfully!  "
     save_logs
     return 0
 
 # end failure
 :end_failure
     echo_summary_msg "## Finish"
-    echo_summary_datetime "build ${BUILD_NUMBER} end failure!  "
+    echo_summary_datetime "Build ${BUILD_NUMBER} failed!  "
     save_logs
     return 1
 }

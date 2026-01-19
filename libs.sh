@@ -43,6 +43,9 @@ function install_devstack() {
 
     ${DRY_RUN} ./unstack.sh >${LOGS_PATH}/devstack/unstack.log 2>&1
     ${DRY_RUN} ./clean.sh >${LOGS_PATH}/devstack/clean.log 2>&1
+
+    # clean all logs 
+    rm -rf ${STACK_PATH}/logs/* 
     echo Devstack Cleaned
 
     ${DRY_RUN} ${SCRIPTS_PATH}/install_with_gerrit.sh >${LOGS_PATH}/devstack/install.log 2>&1
