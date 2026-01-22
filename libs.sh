@@ -49,8 +49,8 @@ function install_devstack() {
     echo Devstack Cleaned
 
     ${DRY_RUN} ${SCRIPTS_PATH}/install_with_gerrit.sh >${LOGS_PATH}/devstack/install.log 2>&1
-
     result=$?
+    
     popd
     return ${result}
 }

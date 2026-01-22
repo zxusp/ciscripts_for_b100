@@ -30,7 +30,7 @@ function main() {
         echo_summary_datetime "Log initialization successful!  "
     else    
         echo_summary_datetime "Log initialization failed!  "
-        goto :end_failure
+        failure_exit
     fi
 
     echo_summary_msg "## Install DevStack"
@@ -40,14 +40,14 @@ function main() {
         echo_summary_datetime "DevStack installation completed successfully!  "
     else
         echo_summary_datetime "DevStack installation failed!  "
-        goto :end_failure
+        failure_exit
     fi
 
     if check_devstack; then
         echo_summary_datetime "DevStack self-check passed!  "
     else 
         echo_summary_datetime "DevStack self-check failed!  "
-        goto :end_failure
+        failure_exit
     fi
 
     echo_summary_msg "## Run Tempest"
@@ -57,27 +57,30 @@ function main() {
         echo_summary_datetime "Smoke Tempest tests completed successfully!  "
     else
         echo_summary_datetime "Smoke Tempest tests failed!  "
-        goto :end_failure
+        failure_exit
     fi
     if run_storage_tempest; then
         echo_summary_datetime "Storage Tempest tests completed successfully!  "
     else
         echo_summary_datetime "Storage Tempest tests failed!  "
-        goto :end_failure
+        failure_exit
     fi
 
-# end success
-    echo_summary_msg "## Finish"
-    echo_summary_datetime "Build ${BUILD_NUMBER} completed successfully!  "
-    save_logs
-    return 0
+    success_exit
+}
 
-# end failure
-:end_failure
+
+function failure_exit() {
     echo_summary_msg "## Finish"
     echo_summary_datetime "Build ${BUILD_NUMBER} failed!  "
     save_logs
-    return 1
+    exit 1
+}
+function success_exit() {
+    echo_summary_msg "## Finish"
+    echo_summary_datetime "Build ${BUILD_NUMBER} completed successfully!  "
+    save_logs
+    exit 0
 }
 
 main
